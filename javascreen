@@ -1,0 +1,74 @@
+#!/usr/bin/env node
+var clint = require('clint')(),
+	fs = require('fs'),
+	phantom = require('phantom');
+
+clint.command('--help', '-h', 'general usage information.');
+clint.command('--source','-s', 'javascript source.');
+clint.command('--destination','-d','file to save.');
+
+var help = function(err){
+	console.log(clint.help(2, " : "));
+	process.exit(err);
+}
+
+var args = process.argv.slice(2)
+
+if (!args.length) help(1);
+
+var source = null;
+var destination = null;
+
+clint.on("command", function(name, value){
+	switch (name){
+		case "--help" : help(0); break;
+		case "--source": source = value; break;
+		case "--destination": destination = value; break;
+	}
+})
+
+clint.on("complete", function(){
+	if(!source) {
+		return help(2);
+	}else{
+		destination = destination || source +'.png'
+		
+		var javascript = fs.readFileSync(source).toString();
+		var template = fs.readFileSync('index.html').toString();
+		var file = ( template.replace('{code}', javascript) );
+		phantom.create (function(ph){
+			ph.createPage(function(page){
+				page.set('viewportSize',{width: 800, height: 600});
+
+				page.open('data:text/html;base64,' + new Buffer(file).toString('base64'), function(status){
+					
+					if(status == 'success'){
+						page.evaluate(function(){
+						var target = document.getElementById('target');
+						var padding_bottom = 20;
+
+						return {
+							bodyx:document.body.offsetWidth,
+							x: target.offsetWidth,
+							y: target.offsetHeight + padding_bottom
+						};
+						}, function(result){
+							// console.log(result.bodyx, result.x, result.y);
+							page.set('viewportSize',{width: result.x, height: result.y});
+							
+							page.render(destination, function(){
+								ph.exit();
+							});
+						});
+						
+					}else{
+						ph.exit();
+					}
+				})
+			})
+		});
+
+	}
+})
+
+clint.parse(args);
