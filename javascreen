@@ -6,6 +6,8 @@ var clint = require('clint')(),
 clint.command('--help', '-h', 'general usage information.');
 clint.command('--source','-s', 'javascript source.');
 clint.command('--destination','-d','file to save.');
+clint.command('--viewportWidth','-x','viewport width (default: 800)');
+clint.command('--viewportHeight','-y','viewport height (default: 600)');
 
 var help = function(err){
 	console.log(clint.help(2, " : "));
@@ -18,12 +20,16 @@ if (!args.length) help(1);
 
 var source = null;
 var destination = null;
+var height = 600;
+var width = 800;
 
 clint.on("command", function(name, value){
 	switch (name){
 		case "--help" : help(0); break;
 		case "--source": source = value; break;
 		case "--destination": destination = value; break;
+		case "--viewportHeight": height = value; break;
+		case "--viewportWidth": width = value; break;
 	}
 })
 
@@ -38,23 +44,22 @@ clint.on("complete", function(){
 		var file = ( template.replace('{code}', javascript) );
 		phantom.create (function(ph){
 			ph.createPage(function(page){
-				page.set('viewportSize',{width: 800, height: 600});
+				page.set('viewportSize',{width: width, height: height});
 
 				page.open('data:text/html;base64,' + new Buffer(file).toString('base64'), function(status){
 					
 					if(status == 'success'){
 						page.evaluate(function(){
 						var target = document.getElementById('target');
+
 						var padding_bottom = 20;
 
-						return {
-							bodyx:document.body.offsetWidth,
-							x: target.offsetWidth,
-							y: target.offsetHeight + padding_bottom
-						};
+							return {	
+								x: target.offsetWidth,
+								y: target.offsetHeight + padding_bottom
+							};
 						}, function(result){
-							// console.log(result.bodyx, result.x, result.y);
-							page.set('viewportSize',{width: result.x, height: result.y});
+							page.set('viewportSize',{width: result.x , height: result.y});
 							
 							page.render(destination, function(){
 								ph.exit();
@@ -72,3 +77,4 @@ clint.on("complete", function(){
 })
 
 clint.parse(args);
+

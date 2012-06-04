@@ -124,16 +124,13 @@
         .syntaxhighlighter .color2,.syntaxhighlighter .color2 a{color:#4a8cdb !important;}
         .syntaxhighlighter .color3,.syntaxhighlighter .color3 a{color:#96daff !important;}
         .syntaxhighlighter .functions{font-weight:bold !important;}
-
+       	html,body,#target,.syntaxhighlighter{
+       		overflow: hidden!important;
+       	}
     </style>
 	<script type="text/javascript">
         SyntaxHighlighter.all();
-
-        window.onload = function(){
-            var code = document.getElementById('target');
-            alert(code.offsetHeight);
-        };
-    </script>
+	</script>
 </head>
 
 <body style="background: rgb(33,30,30); ">
