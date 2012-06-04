@@ -33,18 +33,33 @@ npm install phantom
 SYNTAX:
 ==========
 
-./javascreen
+  ./javascreen
+  
   --help, -h           : general usage information.
+  
   --source, -s         : javascript source.
+  
   --destination, -d    : file to save.
+  
   --viewportWidth, -x  : viewport width (default: 800)
+  
   --viewportHeight, -y : viewport height (default: 600)
 
 
 EXAMPLE:
 ==========
-./javascreen -s javascreen -d javascreen.png -x 1280
-./javascreen -s example.js
-./javascreen -s example2.js -x 1280
+  
+  
+  ./javascreen -s example.js
+  
+  ![javascreen example.js](https://github.com/kentaromiura/javascreen/raw/master/example.js.png)
+  
+  ./javascreen -s example2.js -x 1280
+
+  ![javascreen example2.js](https://github.com/kentaromiura/javascreen/raw/master/example2.js.png)
+
+  ./javascreen -s javascreen -d javascreen.png -x 1280
+  
+  ![javascreen sshots itself](https://github.com/kentaromiura/javascreen/raw/master/javascreen.png)
 
 
