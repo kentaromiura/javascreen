@@ -27,6 +27,7 @@ to run you must have node.js ready and up to date, and npm installed.
 then you can type:
 
 npm install clint
+
 npm install phantom
 
 SYNTAX:
