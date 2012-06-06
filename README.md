@@ -16,6 +16,7 @@ javascreen is based on some opensource tools:
 * @kamicane [clint](https://github.com/kamicane/clint)
 * [phantomjs](http://phantomjs.org/)
 * @sgentle [phantomjs-node](https://github.com/sgentle/phantomjs-node)
+* @mishoo [UglifyJS](https://github.com/mishoo/UglifyJS)
 
 INSTALL:
 ==========
@@ -29,6 +30,10 @@ then you can type:
 npm install clint
 
 npm install phantom
+
+(optional)
+
+npm install uglify-js
 
 SYNTAX:
 ==========
@@ -44,6 +49,9 @@ SYNTAX:
   --viewportWidth, -x  : viewport width (default: 800)
   
   --viewportHeight, -y : viewport height (default: 600)
+  
+  --prettyprint, -p    : run code beautifier
+
 
 
 EXAMPLE:
@@ -61,5 +69,8 @@ EXAMPLE:
   ./javascreen -s javascreen -d javascreen.png -x 1280
   
   ![javascreen sshots itself](https://github.com/kentaromiura/javascreen/raw/master/javascreen.png)
-
+  
+  ./javascreen -s ugly.js -p
+  
+  ![javascreen beautifier](https://github.com/kentaromiura/javascreen/raw/master/ugly.js.png)
 
