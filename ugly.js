@@ -1,0 +1,1 @@
+var a='test', b='test2',c=[a,b];for(var i=0,max=c.length;i<max;i++)console.log(a);

@@ -8,6 +8,20 @@ clint.command('--source','-s', 'javascript source.');
 clint.command('--destination','-d','file to save.');
 clint.command('--viewportWidth','-x','viewport width (default: 800)');
 clint.command('--viewportHeight','-y','viewport height (default: 600)');
+clint.command('--prettyprint', '-p', 'run code beautifier');
+
+var escapeXML = function(str){
+	return (''+str).replace(/&|<|>|'|"/g,function(c){
+		switch(c){
+			case '&': return '&amp;';break;
+			case '<': return '&lt;';break;
+			case '>': return '&gt;';break;
+			case "'": return '&apos;';break;
+			case '"': return '&quote;';break;
+			default: return c;
+		}
+	});
+}
 
 var help = function(err){
 	console.log(clint.help(2, " : "));
@@ -22,6 +36,7 @@ var source = null;
 var destination = null;
 var height = 600;
 var width = 800;
+var uglify = null;
 
 clint.on("command", function(name, value){
 	switch (name){
@@ -30,6 +45,7 @@ clint.on("command", function(name, value){
 		case "--destination": destination = value; break;
 		case "--viewportHeight": height = value; break;
 		case "--viewportWidth": width = value; break;
+		case "--prettyprint": uglify = require('uglify-js'); break;
 	}
 })
 
@@ -40,6 +56,10 @@ clint.on("complete", function(){
 		destination = destination || source +'.png'
 		
 		var javascript = fs.readFileSync(source).toString();
+		if(uglify){
+			  javascript = uglify.uglify.gen_code(uglify.parser.parse(javascript), { beautify: true });
+		}
+		javascript = escapeXML(javascript);
 		var template = fs.readFileSync('index.html').toString();
 		var file = ( template.replace('{code}', javascript) );
 		phantom.create (function(ph){
