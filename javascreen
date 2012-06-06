@@ -17,7 +17,7 @@ var escapeXML = function(str){
 			case '<': return '&lt;';break;
 			case '>': return '&gt;';break;
 			case "'": return '&apos;';break;
-			case '"': return '&quote;';break;
+			case '"': return '&quot;';break;
 			default: return c;
 		}
 	});
